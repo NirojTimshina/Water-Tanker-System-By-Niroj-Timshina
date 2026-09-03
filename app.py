@@ -13,16 +13,7 @@ import oracledb
 app = Flask(__name__)
 app.secret_key = "water_tanker_secret_key_2026"
 
-DB_USER = "water_tanker_user"
-DB_PASSWORD = "Water123"
-DB_HOST = "localhost"
-DB_PORT = 1521
-DB_SERVICE = "XEPDB1"
-
-app.config['SQLALCHEMY_DATABASE_URI'] = (
-    f"oracle+oracledb://{DB_USER}:{DB_PASSWORD}@"
-    f"{DB_HOST}:{DB_PORT}/?service_name={DB_SERVICE}"
-)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tanker.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
@@ -35,8 +26,10 @@ app.register_blueprint(delivery_bp)
 app.register_blueprint(query_bp)
 app.register_blueprint(page_bp)
 
+# Render (Gunicorn) ra local dubai ma table banos ra scheduler chalos
+with app.app_context():
+    db.create_all()
+    start_scheduler(app, db, TankerRequest)
 
 if __name__ == '__main__':
-    with app.app_context():
-        start_scheduler(app, db, TankerRequest)
     app.run(debug=True, use_reloader=False)
