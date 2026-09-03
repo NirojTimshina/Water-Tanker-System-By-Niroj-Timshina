@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>Delivery Records</h1>
+
+    <div class="card">
+        <h2 style="margin-top:0;">Add New Delivery</h2>
+        <form method="POST" action="/deliveries-page/add">
+            <input type="number" name="request_id" placeholder="Request ID" required>
+            <input type="number" name="supplier_id" placeholder="Supplier ID" required>
+            <input type="text" name="delivery_time" placeholder="Delivery Time (e.g. Morning)">
+            <input type="number" name="actual_quantity" placeholder="Actual Quantity">
+            <input type="number" name="delay_hours" placeholder="Delay Hours">
+            <button type="submit">Add Delivery</button>
+        </form>
+    </div>
+
+    <h2>All Deliveries</h2>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Request ID</th>
+            <th>Supplier ID</th>
+            <th>Time</th>
+            <th>Quantity</th>
+            <th>Delay (hrs)</th>
+            <th>Payment Status</th>
+            <th>Action</th>
+        </tr>
+        {% for d in deliveries %}
+        <tr>
+            <td>{{ d.delivery_id }}</td>
+            <td>{{ d.request_id }}</td>
+            <td>{{ d.supplier_id }}</td>
+            <td>{{ d.delivery_time }}</td>
+            <td>{{ d.actual_quantity }}</td>
+            <td>{{ d.delay_hours }}</td>
+            <td>
+                <form method="POST" action="/deliveries-page/update-status/{{ d.delivery_id }}" style="display:flex; gap:6px;">
+                    <select name="payment_status" onchange="this.form.submit()">
+                        <option value="pending" {% if d.payment_status == 'pending' %}selected{% endif %}>Pending</option>
+                        <option value="paid" {% if d.payment_status == 'paid' %}selected{% endif %}>Paid</option>
+                    </select>
+                </form>
+            </td>
+            <td>
+                <form method="POST" action="/deliveries-page/delete/{{ d.delivery_id }}" style="display:inline;">
+                    <button type="submit" class="delete-btn">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

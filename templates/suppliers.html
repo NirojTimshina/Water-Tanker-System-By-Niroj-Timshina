@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>Water Suppliers</h1>
+
+    <h2>Add New Supplier</h2>
+    <form method="POST" action="/suppliers-page/add">
+        <input type="text" name="supplier_name" placeholder="Supplier Name" required>
+        <input type="text" name="phone" placeholder="Phone">
+        <input type="number" name="tanker_capacity_liters" placeholder="Tanker Capacity (Liters)">
+        <input type="number" step="0.01" name="price_per_tanker" placeholder="Price per Tanker">
+        <button type="submit">Add Supplier</button>
+    </form>
+
+    <h2>All Suppliers</h2>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Capacity (L)</th>
+            <th>Price</th>
+            <th>Action</th>
+        </tr>
+        {% for s in suppliers %}
+        <tr>
+            <td>{{ s.supplier_id }}</td>
+            <td>{{ s.supplier_name }}</td>
+            <td>{{ s.phone }}</td>
+            <td>{{ s.tanker_capacity_liters }}</td>
+            <td>{{ s.price_per_tanker }}</td>
+            <td>
+                <form method="POST" action="/suppliers-page/delete/{{ s.supplier_id }}" style="display:inline;">
+                    <button type="submit" class="delete-btn">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

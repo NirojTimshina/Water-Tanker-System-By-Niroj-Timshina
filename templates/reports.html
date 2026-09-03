@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>Reports</h1>
+
+    <h2>Zone Shortage Report</h2>
+    <table>
+        <tr>
+            <th>Zone</th>
+            <th>Total Requests</th>
+            <th>Emergency Requests</th>
+            <th>Avg Delay (hrs)</th>
+        </tr>
+        {% for z in zone_report %}
+        <tr>
+            <td>{{ z.zone_name }}</td>
+            <td>{{ z.total_requests }}</td>
+            <td>{{ z.emergency_requests }}</td>
+            <td>{{ z.avg_delay_hours }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Supplier Reliability Report</h2>
+    <table>
+        <tr>
+            <th>Supplier</th>
+            <th>Total Deliveries</th>
+            <th>Avg Delay (hrs)</th>
+            <th>Total Quantity Delivered</th>
+        </tr>
+        {% for s in supplier_report %}
+        <tr>
+            <td>{{ s.supplier_name }}</td>
+            <td>{{ s.total_deliveries }}</td>
+            <td>{{ s.avg_delay_hours }}</td>
+            <td>{{ s.total_quantity_delivered }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
